@@ -6,7 +6,7 @@ class Rates extends Collection {
     /**
      * @param data
      */
-    constructor (data) {
+    constructor (data, sort = [{field: "fromCurrencyId", order: "asc"}, {field: "toCurrencyId", order: "asc"}]) {
         super();
 
         this.data = parse(data, {
@@ -39,7 +39,7 @@ class Rates extends Collection {
             }
         });
 
-        this.data.sort((a, b) => (a[4] > b[4]) ? -1 : ((b[4] > a[4]) ? 1 : 0))
+        this.multiFieldSort(sort)
     }
 
     /**

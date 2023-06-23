@@ -23,6 +23,25 @@ class Collection {
         return this.data
     }
 
+    multiFieldSort(sortParams) {
+        return this.data.sort((a, b) => {
+            for (let i = 0; i < sortParams.length; i++) {
+                const { field, order } = sortParams[i];
+                const aValue = a[field];
+                const bValue = b[field];
+
+                if (aValue < bValue) {
+                    return order === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return order === 'asc' ? 1 : -1;
+                }
+            }
+
+            return 0; // Objects are equal for all specified fields
+        });
+    }
+
     /**
      * @param buf
      * @returns {Buffer}
