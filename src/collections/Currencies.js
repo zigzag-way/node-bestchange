@@ -10,7 +10,9 @@ class Currencies extends Collection {
         for (const row of parse(this.convertUtf8(data), {delimiter: ';'})) {
             this.data[row[0]] = {
                 id: row[0],
-                name: row[2]
+                name: row[2],
+                ticker: row[3],
+                type: row[5]
             }
         }
     }
