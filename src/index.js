@@ -17,9 +17,22 @@ class Index {
      */
     async load() {
         const zip = await this.downloadZip()
+        
+        // Создаем парсер отдельно, чтобы иметь на него ссылку
+        const parser = unzipper.Parse();
+
+        // -----------------------------------------------------------
+        // ИСПРАВЛЕНИЕ:
+        // Если поток скачивания (zip) выдаст ошибку (обрыв сети),
+        // мы перекидываем эту ошибку в парсер.
+        // Парсер тогда отклонит свой промис, и сработает ваш catch.
+        // -----------------------------------------------------------
+        zip.on('error', (err) => {
+            parser.emit('error', err);
+        });
 
         await zip
-            .pipe(unzipper.Parse())
+            .pipe(parser)
             .on('entry', async entry => {
                 switch (entry.path) {
                     case 'bm_cy.dat':
